@@ -1,1 +1,41 @@
+name: Build APK
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.24.0"
+          channel: "stable"
+
+      - name: Create Flutter platform skeleton (android/ios)
+        run: |
+          flutter create --platforms=android --org com.example --project-name finance_manager_app build_project
+          rm -rf build_project/lib
+          cp -r lib build_project/lib
+          cp pubspec.yaml build_project/pubspec.yaml
+
+      - name: Install dependencies
+        working-directory: build_project
+        run: flutter pub get
+
+      - name: Build release APK
+        working-directory: build_project
+        run: flutter build apk --release
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: finance-manager-app-apk
+          path: build_project/build/app/outputs/flutter-apk/app-release.apk
 

@@ -77,7 +77,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             const Text("يوم استلام الراتب", style: TextStyle(fontWeight: FontWeight.w600)),
             const SizedBox(height: 6),
             DropdownButtonFormField<int>(
-              initialValue: _salaryDay,
+              Value: _salaryDay,
               items: List.generate(28, (i) => i + 1)
                   .map((d) => DropdownMenuItem(value: d, child: Text("يوم $d")))
                   .toList(),
